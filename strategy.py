@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+from scipy.stats import norm
 
 def compute_log_returns(predicted_prices):
     """Compute log returns from predicted prices."""
@@ -159,6 +161,13 @@ def calculate_shares_kelly(portfolio_equity, win_rate, avg_win, avg_loss, curren
     num_shares = int(dollar_amount / current_price)
 
     return num_shares
+
+def black_scholes_call(S, K, T, r, sigma):
+    """Black-Scholes call option price."""
+    d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+    d2 = d1 - sigma * np.sqrt(T)
+    price = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
+    return price
 
 def simulate_trading_action(weighted_logret_proxy, holding_asset):
   """
